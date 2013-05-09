@@ -92,7 +92,7 @@ grandfather(X, Y) :-
 
 grandmother(X, Y) :-
     grandparent(X, Y),
-    female(Y).
+    female(X).
 
 paternalgrandfather(X, Y) :-
     father(X, Z),
