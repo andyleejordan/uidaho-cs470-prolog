@@ -186,3 +186,15 @@ secondcousin(X, Y) :-
     \+sibling(X, Y),
     \+cousin(X, Y),
     X \= Y.
+
+nephew(X, Y) :-
+    aunt(Y, X),
+    male(X);
+    uncle(Y, X),
+    male(X).
+
+niece(X, Y) :-
+    aunt(Y, X),
+    female(X);
+    uncle(Y, X),
+    female(X).
