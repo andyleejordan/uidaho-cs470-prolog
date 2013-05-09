@@ -33,6 +33,11 @@ parent(jack, alex).
 parent(ginger, katelyn).
 parent(zack, katelyn).
 
+parent(tim, carol).
+
+parent(carol, ashley).
+parent(carol, chelsea).
+
 male(jack).
 male(andrew).
 male(alex).
@@ -52,6 +57,9 @@ female(paula).
 female(rose).
 female(dianne).
 female(katelyn).
+female(carol).
+female(ashley).
+female(chelsea).
 
 /* rules */
 
@@ -117,9 +125,6 @@ daughter(X, Y) :-
     child(X, Y),
     female(X).
 
-grandchild(X, Y) :-
-    grandparent(Y, X).
-
 granddaughter(X, Y) :-
     grandchild(X, Y),
     female(X).
@@ -170,3 +175,7 @@ cousin(X, Y) :-
     grandparent(Z, Y),
     \+sibling(X, Y),
     X \= Y.
+
+cousinonceremoved(X, Y) :-
+    cousin(Z, Y),
+    child(X, Z).
