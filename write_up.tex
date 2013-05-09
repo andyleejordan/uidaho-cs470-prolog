@@ -1,0 +1,49 @@
+\documentclass[12pt, article]{scrartcl}
+\usepackage[english]{babel}
+\usepackage{sectsty}
+\allsectionsfont{\centering \normalfont\scshape}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead{}
+\fancyfoot[L]{}
+\fancyfoot[C]{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{13.6pt}
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
+
+\title{	
+\normalfont \normalsize 
+\textsc{University of Idaho: CS 470 - Artificial Intelligence} \\ [25pt]
+\horrule{0.5pt} \\[0.4cm]
+\huge Project 4: Prolog\\
+\horrule{2pt} \\[0.5cm]
+}
+\author{Andrew Schwartzmeyer}
+\date{\normalsize\today}
+
+\begin{document}
+\maketitle 
+\begin{abstract}
+For this project I wrote a Prolog knowledge base, that given a set of parent and gender facts (that is, a fact for each parental relationship, and a gender for each person), family-relationship queries can be answered. Defined relationships range from as specifc as brothers to as general as ancestors. Specifically, this knowledge base contains most of my family within four generations.
+\end{abstract}
+\pagebreak
+\section{Introduction}
+The knowledge base consists of two fact types: parental relationships and genders. A parent fact is expressed as ``parent(a, b)'' where ``b'' is the child of ``a'' (these cannot be capitalized, as in Prolog, words starting with a capitalized letter are considered variables, which are used in rules). There are two gender facts, male and female. A gender is expressed as ``male(a) or female(a)'', where ``a'' is one person.
+
+The rules in the knowledge base are defined abstractly based on facts, other rules, or combinations of the two. For instance, a sibling relationship exists when there is a common parent to two persons, and a brother relationship exists where X is a sibling to Y, and X is also male. A more complex relationship would be an uncle. An uncle relationship between X and Y is exists when there is a brother relationship between X and some Z, and Y is a child of said Z.
+
+Possibly the most complexly defined relationship is that of second cousins, where X and Y share a greatgrandparent (which was defined off of the grandparent relationship, off the parent fact), and are also not siblings, cousins, nor the same person.
+
+Ancestory is a recursively defined relationship, with a base case of an ancestor being a parent X to Y, and then defined on top of itself to include parents of ancestors. This made defining descendants easy, as it is simply the opposite of the ancestor relationship.
+
+The most general relationship is that of a relative, that is, X is a relative to Y (and vice versa) if they share some Z ancestor.
+
+Some of the relationships defined are mutual. If there is some sibling, cousin, or relative relationship between two people in X and Y, then the relationship also exists from Y to X, and will be returned seemingly twice by the Prolog interpreter; this is expected behavior.
+
+\section{Relationships}
+The defined relationshps are: mother, father, child, gender specifc child (son or daughter), partner (that is, share a child), grandparent, gender specific and maternal/paternal versions of grandparent, gender specific versions of grandchild, great-great-grandparents and children, ancestor, descendant, relative, sibling, gender specific sibling (sister or brother), uncle, aunt, cousin, cousin once-removed (children of cousins), and second cousins (sharing only a great-grandparent).
+
+\section{Results}
+\end{document}
