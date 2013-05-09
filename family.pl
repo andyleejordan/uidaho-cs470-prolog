@@ -75,6 +75,9 @@ grandparent(X, Y) :-
     parent(X, Z),
     parent(Z, Y).
 
+grandchild(X, Y) :-
+    grandparent(Y, X).
+
 grandfather(X, Y) :-
     grandparent(X, Y),
     male(X).
@@ -103,6 +106,9 @@ greatgrandparent(X, Y) :-
     parent(P, Y),
     grandparent(X, P).
 
+greatgrandchild(X, Y) :-
+    greatgrandparent(Y, X).
+
 son(X, Y) :-
     child(X, Y),
     male(X).
@@ -115,7 +121,7 @@ grandchild(X, Y) :-
     grandparent(Y, X).
 
 granddaughter(X, Y) :-
-    grandchild(X, Y)
+    grandchild(X, Y),
     female(X).
 
 grandson(X, Y) :-
@@ -159,7 +165,7 @@ aunt(X, Y) :-
     sister(X, Z),
     child(Y, Z).
 
-cousins(X, Y) :-
+cousin(X, Y) :-
     grandparent(Z, X),
     grandparent(Z, Y),
     \+sibling(X, Y),
