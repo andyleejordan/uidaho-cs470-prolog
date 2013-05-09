@@ -40,10 +40,154 @@ Ancestory is a recursively defined relationship, with a base case of an ancestor
 
 The most general relationship is that of a relative, that is, X is a relative to Y (and vice versa) if they share some Z ancestor.
 
+Some relationships are defined using OR clauses (reprensented by a semicolon) in addition to the AND clauses (represented by a comma). Nephews for instance can be either reverse of an aunt and male, or reverse of an uncle and male. Nieces are defined similarly.
+
 Some of the relationships defined are mutual. If there is some sibling, cousin, or relative relationship between two people in X and Y, then the relationship also exists from Y to X, and will be returned seemingly twice by the Prolog interpreter; this is expected behavior.
 
 \section{Relationships}
-The defined relationshps are: mother, father, child, gender specifc child (son or daughter), partner (that is, share a child), grandparent, gender specific and maternal/paternal versions of grandparent, gender specific versions of grandchild, great-great-grandparents and children, ancestor, descendant, relative, sibling, gender specific sibling (sister or brother), uncle, aunt, cousin, cousin once-removed (children of cousins), and second cousins (sharing only a great-grandparent).
+The defined relationshps are: mother, father, child, gender specifc child (son or daughter), partner (that is, share a child), grandparent, gender specific and maternal/paternal versions of grandparent, gender specific versions of grandchild, great-great-grandparents and children, ancestor, descendant, relative, sibling, gender specific sibling (sister or brother), uncle, aunt, cousin, cousin once-removed (children of cousins), second cousins (sharing only a great-grandparent), and nephews and nieces.
 
 \section{Results}
+Here Prolog computes my father.
+\begin{verbatim}
+| ?- father(X, andrew).
+
+X = jack ? ;
+
+no
+\end{verbatim}
+
+Here I ask Prolog who is Jack's partner. It answers Amy (my mother) four times because I defined four children (for the sake of brevity, I included only biological siblings, not my adopted brothers).
+\begin{verbatim}
+| ?- partner(jack, X).
+
+X = amy ? ;
+
+X = amy ? ;
+
+X = amy ? ;
+
+X = amy ? ;
+
+no
+\end{verbatim}
+
+Here I ask for my grandmothers, of which Peggy (my mom's side) and Rose (my dad's side) are returned. Theoretically I could extend this database to include my step-grandparents as well (Donald and Carmen, my mother's parents' second spouses), but that was long enough to write out in plain English.
+\begin{verbatim}
+| ?- grandmother(X, andrew).
+
+X = peggy ? ;
+
+X = rose ? ;
+
+no
+\end{verbatim}
+
+I ask Prolog specifically for my paternal grandfather here (that is, my father's father).
+\begin{verbatim}
+| ?- paternalgrandfather(X, andrew).
+
+X = george ? ;
+
+no
+\end{verbatim}
+
+Here I ask for my cousins that are once removed (my cousin Carol's children). As we share two grandparents, they are both returned twice.
+\begin{verbatim}
+| ?- cousinonceremoved(X, andrew).
+
+X = ashley ? ;
+
+X = chelsea ? ;
+
+X = ashley ? ;
+
+X = chelsea ? ;
+
+(1 ms) no
+\end{verbatim}
+
+Now I ask Prolog to list all second cousin relationships (all other relationships had too many results to fit into this report). It shows my sister Ginger's daughter Katelyn (she has two more, but they were excluded for brevity), relationship as second cousin to my and my sister's cousin Carol's daughters, Chelsea and Ashley. Being a mutual relationship (second cousins go each direction), and being through two ancestors (their mutual great-grandmother and great-grandfather), eight relationships are returned.
+\begin{verbatim}
+ ?- secondcousin(X, Y).
+
+X = katelyn
+Y = ashley ? ;
+
+X = katelyn
+Y = chelsea ? ;
+
+X = katelyn
+Y = ashley ? ;
+
+X = katelyn
+Y = chelsea ? ;
+
+X = ashley
+Y = katelyn ? ;
+
+X = ashley
+Y = katelyn ? ;
+
+X = chelsea
+Y = katelyn ? ;
+
+X = chelsea
+Y = katelyn ? ;
+
+(2 ms) no
+\end{verbatim}
+
+Here I ask for Katelyn's aunt, and it returns my sister Jackie twice. This particular knowledge base is counting the relationship through both Ginger and her husband Zack, even though Zack is not related to Jackie except through marriage. Extending the knowledge base further would prevent this.
+\begin{verbatim}
+ ?- aunt(X, katelyn).
+
+X = jackie ? ;
+
+X = jackie ? ;
+
+(1 ms) no
+\end{verbatim}.
+
+Here I ask for my cousin Carol's uncle, only to be given no relatinships. It was then that I remembered my mother's only brother is Carol's father, but she has three aunts (returned twice through both maternal and paternal relationships).
+\begin{verbatim}
+| ?- uncle(X, carol).
+
+no
+| ?- father(X, carol).
+
+X = tim ? ;
+
+(1 ms) no
+| ?- aunt(X, carol).
+X = amy ? ;
+
+X = paige ? ;
+
+X = paula ? ;
+
+X = amy ? ;
+
+X = paige ? ;
+
+X = paula ? ;
+
+no
+\end{verbatim}
+
+To find the common ancestor of two people (me and my cousin), I can ask Prolog a compound statement using a comma to represent a logical AND. As expected, it returned our grandparents.
+\begin{verbatim}
+| ?- ancestor(X, chelsea), ancestor(X, andrew).
+
+X = peggy ? ;
+
+X = woody ? ;
+
+no
+\end{verbatim}
+\section{Discussion}
+This knowledge base can return many types of relationships based on just two facts for each individual added (gender and parent). However, it cannot adequately represent non-blood relationships, such as those through marriage or adoption. Most questions can be answered with a simple or compound query, but it will not alert you to these non-blood relationships. As an example, it doubly counts my sister Jackie as aunt to Katelyn because of both Ginger and her husband Zack. Fortunately, because my parent's are not defined as Zack's parents, he is successfully excluded from cousin relationships (that is, he is not returned as a cousin to Carol). Adding additional rules to define half and step relationships would nearly complete this knowledge base; however, to successfully define all roles, an ``adoptedparent'' fact would need to be added, that would be used to compute these non-blood relationships. I found that adding new rules and formulating queries was incredibly easy, thanks to Prolog being a language meant to define logical relationships.
+
+\pagebreak
+\section{Knowledge Base}
 \end{document}
