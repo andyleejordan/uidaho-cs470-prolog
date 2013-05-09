@@ -179,3 +179,10 @@ cousin(X, Y) :-
 cousinonceremoved(X, Y) :-
     cousin(Z, Y),
     child(X, Z).
+
+secondcousin(X, Y) :-
+    greatgrandparent(Z, X),
+    greatgrandparent(Z, Y),
+    \+sibling(X, Y),
+    \+cousin(X, Y),
+    X \= Y.
